@@ -25,6 +25,7 @@ export interface Settings {
 }
 
 export interface State {
+  schema?: number;
   onboarded: boolean;
   settings: Settings;
   events: CalEvent[];
@@ -67,12 +68,13 @@ export function makeSettings(names: string[], household: string, modules: Record
     modules: { ...modules },
     widgets: DEFAULT_WIDGETS.map((id) => ({ id, on: id === "budget" ? modules.budget : true })),
     theme: "seasonal",
-    mealSlots: ["dinner"],
+    mealSlots: ["breakfast", "lunch", "dinner"],
     weeklyBudget: null,
   };
 }
 
 const fresh = (): State => ({
+  schema: 2,
   onboarded: false,
   settings: makeSettings(["You"], "My Home"),
   events: [], todos: [], meals: [], groceries: [], expenses: [],
@@ -83,7 +85,16 @@ const KEY = "homeboard:v1";
 function load(): State {
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw) return { ...fresh(), ...JSON.parse(raw) };
+    if (raw) {
+      const saved = JSON.parse(raw) as Partial<State>;
+      const st = { ...fresh(), ...saved } as State;
+      // v2: the meal plan shows breakfast, lunch and dinner by default (boards made earlier had dinner only).
+      if ((saved.schema ?? 1) < 2) {
+        if (st.settings.mealSlots.join() === "dinner") st.settings = { ...st.settings, mealSlots: ["breakfast", "lunch", "dinner"] };
+        st.schema = 2;
+      }
+      return st;
+    }
   } catch { /* storage unavailable: start fresh */ }
   return fresh();
 }

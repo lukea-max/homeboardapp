@@ -18,7 +18,7 @@ Positioning: **"the fridge whiteboard, upgraded."** One shared board, not anothe
 1. **Board** (home): customizable widgets — today, today's plan, this week, to-dos, meals, groceries, budget.
 2. **Calendar**: month grid with per-month theme, any month/year, holidays, birthdays (yearly repeat), per-person color.
 3. **To-dos**: assign to a person or everyone, optional date, "someday" bucket.
-4. **Meals**: week plan (dinner only, or breakfast/lunch/dinner in Settings).
+4. **Meals**: the whole week at a glance, one row per day with breakfast, lunch and dinner columns (like the original board). Any column can be hidden in Settings.
 5. **Groceries**: one shared list, check off while shopping, clear checked.
 6. **Budget** (optional module): log spending by category, weekly budget bar.
 7. **Assistant** (its own tab): tell it what's going on in plain words ("dentist Tuesday at 3, tacos tomorrow, add tortillas") and it proposes calendar events, to-dos, meals, grocery items and expenses. Nothing is added until you tap "Add to board". Runs on Claude through Netlify AI Gateway (`netlify/functions/assistant.mts`, rate-limited per visitor).

@@ -71,7 +71,7 @@ function MealInput({ ds, slot }: { ds: string; slot: Slot }) {
   const [v, setV] = useState(cur);
   const [focused, setFocused] = useState(false);
   return (
-    <input className="meal-in hand" value={focused ? v : cur} placeholder={slot === "dinner" ? "what's for dinner?" : slot}
+    <input className="meal-in hand" value={focused ? v : cur} placeholder="+ add"
       onFocus={() => { setV(cur); setFocused(true); }}
       onChange={(e) => setV(e.target.value)}
       onBlur={() => { setFocused(false); if (v !== cur) actions.setMeal(ds, slot, v); }}
@@ -84,25 +84,37 @@ export function Meals() {
   const s = useAppState();
   const [offset, setOffset] = useState(0);
   const ws = addDays(weekStart(new Date()), offset * 7);
+  const we = addDays(ws, 6);
   const slots = s.settings.mealSlots;
+  const fmt = (d: Date) => d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+  const planned = Array.from({ length: 7 }, (_, i) => iso(addDays(ws, i))).reduce((n, ds) => n + slots.filter((sl) => mealOn(s, ds, sl)).length, 0);
   return (
     <section className="view">
       <div className="pagehead">
-        <h2 className="sec big">meals</h2>
+        <div><span className="eyebrow">{offset === 0 ? "this week" : offset === 1 ? "next week" : offset === -1 ? "last week" : "week of"} · {fmt(ws)} – {fmt(we)}</span><h2 className="sec big">meals</h2></div>
         <div className="navbtns">
           <button className="round" type="button" onClick={() => setOffset(offset - 1)} aria-label="Previous week">‹</button>
-          <span className="eyebrow">{offset === 0 ? "this week" : ws.toLocaleDateString(undefined, { month: "short", day: "numeric" })}</span>
+          {offset !== 0 && <button className="btn" type="button" onClick={() => setOffset(0)}>This week</button>}
           <button className="round" type="button" onClick={() => setOffset(offset + 1)} aria-label="Next week">›</button>
         </div>
       </div>
-      <p className="hint">Tap a day and type. It saves when you leave the box.</p>
-      <div className="meals">
+      <p className="hint">{planned} of {7 * slots.length} meals planned. Tap any box to type; it saves when you leave it.</p>
+      <div className="mealweek" style={{ ["--cols" as string]: slots.length }}>
+        <div className="colheads" aria-hidden="true"><span /> {slots.map((sl) => <span key={sl}>{sl}</span>)}</div>
         {Array.from({ length: 7 }, (_, i) => {
           const d = addDays(ws, i), ds = iso(d);
           return (
-            <div key={ds} className={"card mealday" + (ds === today() ? " on" : "")}>
-              <div className="mdh"><b>{DOW[i]}</b><span>{d.getDate()}</span></div>
-              {slots.map((sl) => <div key={sl} className="mslot">{slots.length > 1 && <span className="eyebrow">{sl}</span>}<MealInput ds={ds} slot={sl} /></div>)}
+            <div key={ds} className={"mday" + (ds === today() ? " on" : "") + (ds < today() ? " past" : "")}>
+              <div className="dayname"><b>{DOW[i]}</b><span>{d.getDate()}</span>{ds === today() && <em>today</em>}</div>
+              {slots.map((sl) => {
+                const has = !!mealOn(s, ds, sl);
+                return (
+                  <label key={sl} className={"meal card" + (has ? "" : " blank")}>
+                    <span className="slot">{sl}</span>
+                    <MealInput ds={ds} slot={sl} />
+                  </label>
+                );
+              })}
             </div>
           );
         })}
