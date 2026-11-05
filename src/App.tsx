@@ -15,7 +15,9 @@ const TABS: { id: Tab; label: string }[] = [
   { id: "meals", label: "Meals" }, { id: "groceries", label: "Groceries" }, { id: "budget", label: "Budget" }, { id: "settings", label: "Settings" },
 ];
 
-const readHash = (): Tab => (location.hash.slice(1) as Tab) || "board";
+// "settings" is spelled "setup" in the URL so it never clashes with host pages that reserve #settings.
+const toHash = (t: Tab) => (t === "settings" ? "setup" : t);
+const readHash = (): Tab => { const h = location.hash.slice(1); return ((h === "setup" ? "settings" : h) as Tab) || "board"; };
 
 export default function App() {
   const s = useAppState();
@@ -26,7 +28,7 @@ export default function App() {
 
   const tabs = TABS.filter((t) => t.id === "board" || t.id === "settings" || s.settings.modules[t.id as ModuleId]);
   const active = tabs.some((t) => t.id === tab) ? tab : "board";
-  const go = (t: Tab) => { location.hash = t; setTab(t); window.scrollTo(0, 0); };
+  const go = (t: Tab) => { location.hash = toHash(t); setTab(t); window.scrollTo(0, 0); };
 
   useEffect(() => { const f = () => setTab(readHash()); window.addEventListener("hashchange", f); return () => window.removeEventListener("hashchange", f); }, []);
   // Calendar wears the theme of the month you're looking at; everything else follows the setting.
