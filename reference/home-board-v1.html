@@ -1161,14 +1161,14 @@ const POSTER={
   sep:{base:"#5F4287",letter:"#D4B6E7",deep:"#2A1640",mk:"l"},oct:{base:"#D78A3A",letter:"#F6D9B9",deep:"#3F2208",mk:"d"},
   nov:{base:"#1E3A4A",letter:"#5AA1AE",deep:"#0B1B23",mk:"l"},dec:{base:"#A8282B",letter:"#F0909A",deep:"#4A0A0C",mk:"l"}};
 const posterKey=()=>{if(S.themeOverride&&POSTER[S.themeOverride])return S.themeOverride;const t=S.settings.theme||"seasonal";return POSTER[t]?t:MKEYS[new Date().getMonth()]};
-const ANNIV="2025-06-30";
+const ANNIV=null; // set an anniversary date (YYYY-MM-DD) to show monthly anniversary notes
 function posterNote(){
   const n=new Date(),y=n.getFullYear(),m=n.getMonth(),d=n.getDate(),md=(m+1)+"-"+d;
   const nthDow=(mo,dow,k)=>{const f=new Date(y,mo,1);return 1+((dow-f.getDay()+7)%7)+7*(k-1)};
   const H={"1-1":"happy new year!","2-14":"happy valentine's day","3-17":"happy st. patrick's","7-4":"happy 4th of july!","10-31":"happy halloween!","12-24":"christmas eve!","12-25":"merry christmas!","12-31":"new year's eve!"};
   H["11-"+nthDow(10,4,4)]="happy thanksgiving!";
-  const a=parse(ANNIV);let months=(y-a.getFullYear())*12+(m-a.getMonth());
-  if(d===a.getDate()&&months>0)return `happy ${months} months, us!`;
+  if(ANNIV){const a=parse(ANNIV);const months=(y-a.getFullYear())*12+(m-a.getMonth());
+  if(d===a.getDate()&&months>0)return `happy ${months} months, us!`;}
   if(H[md])return H[md];
   const ev=Object.values(S.events||{}).filter(e=>e.date>TODAY&&(!e.repeat||e.repeat==="none")).sort((x,z)=>x.date.localeCompare(z.date))[0];
   if(ev){const dd=Math.round((parse(ev.date)-parse(TODAY))/864e5);return `${ev.title.toLowerCase()} in ${dd} day${dd>1?"s":""}`}

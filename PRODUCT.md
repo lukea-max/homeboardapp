@@ -1,46 +1,50 @@
-# HomeBoard — product brief (draft)
+# HomeBoard — product brief
 
 ## The idea
-Most couples run their household across five apps: a shared calendar, a notes app for groceries, a group text for "what's for dinner", a banking app, and memory. HomeBoard puts the everyday stuff in one calm, good-looking place that both people actually open.
+Most households run their week across five apps: a shared calendar, a notes app for groceries, a group text for "what's for dinner", a banking app, and memory. HomeBoard puts the everyday stuff on one good-looking board that everyone in the home actually opens.
 
-## Who it's for (proposed — confirm)
-- **Primary:** couples living together, 22–40, both on phones, no kids or young kids.
-- **Secondary:** roommates and small families.
-- **Job to be done:** "Help us know what's happening this week, who's doing what, and what we need — without nagging each other."
+## Who it's for (decided)
+One app, three kinds of households. You pick yours at sign-up and the board sets itself up for you; everything can be changed later.
 
-## What we learned from the prototype
-Used daily by two people for about two weeks. What earned its place:
-- **Today at a glance** (home screen): today's plans, reminders, meals.
-- **Calendar** with color per person and simple month/week views.
-- **Shared to-dos** with "someday" items (no due date).
-- **Meal plan → grocery list**, with a fresh list per shopping trip.
-- **Date ideas** list.
+| Household | Board starts with | Language tweaks |
+| --- | --- | --- |
+| **Couple** | Today, week, shared to-dos, dinner plan, groceries, date ideas | "us", partner colors |
+| **Family** | Today, week, to-dos/chores per person, meal plan, groceries | kids as people with their own color |
+| **Student / roommates** | Today, classes & deadlines, to-dos, budget, shared groceries & bills | "classes", "split" |
 
-What was too much for most people:
-- Full budget tracking with categories, receipts and card statements → move to a later "Spending" add-on, or drop.
-- Receipt photo scanning (needs a paid AI API) → later.
-- Per-meal ingredient lists, aisle sorting, estimated receipt → nice extras, not v1.
-- Monthly poster themes → keep **one** signature look plus a seasonal accent, not 12 themes.
+Positioning: **"the fridge whiteboard, upgraded."** One shared board, not another productivity tool.
 
-## v1 scope (proposed)
-1. **Today** — one screen: today's events, to-dos, tonight's dinner, next 3 days.
-2. **Calendar** — month + agenda views, color per person, repeating events, birthdays and holidays.
-3. **To-dos** — shared list, assign to a person or both, optional date, "someday" bucket.
-4. **Meals & groceries** — plan dinners for the week; one tap adds items to the grocery list; check off while shopping.
-5. **Household** — invite your partner with a link; both see changes live.
-6. **Reminders** — push notifications for events (1 day / 1 hour before) and dated to-dos.
+## Core principles (decided)
+1. **Your board, your way.** Every section is a module you can switch on or off in Settings, and the home board is made of widgets you can drag to reorder or hide.
+2. **Budget is optional.** Off by default for couples and families, on for students. Lives in Settings → Modules.
+3. **Same look as the original board.** Monthly color-block poster themes, frosted acrylic glass cards, dry-erase handwriting for content. Twelve monthly palettes plus "follow the season".
+4. **Phone first.** Designed at 390px, scales up to iPad and desktop.
 
-Out of v1: budget, receipt scanning, date ideas (fast follow), multiple households.
+## v1 scope
+1. **Board** (home): customizable widgets — today, today's plan, this week, to-dos, meals, groceries, budget.
+2. **Calendar**: month grid with per-month theme, any month/year, holidays, birthdays (yearly repeat), per-person color.
+3. **To-dos**: assign to a person or everyone, optional date, "someday" bucket.
+4. **Meals**: week plan (dinner only, or breakfast/lunch/dinner in Settings).
+5. **Groceries**: one shared list, check off while shopping, clear checked.
+6. **Budget** (optional module): log spending by category, weekly budget bar.
+7. **Settings**: household type, people & colors, modules on/off, board layout, theme.
 
-## How it ships (proposed)
-- **Installable web app (PWA)** first: works on iPhone, Android, iPad and desktop from one link, "Add to Home Screen", no App Store review. Wrap with Capacitor later for the App Store / Play Store if traction justifies it.
-- **Stack:** React + Vite + TypeScript + Tailwind, Supabase (auth, Postgres, realtime sync, row-level security per household), hosted on Netlify or Vercel. Web push for reminders.
-- **Pricing idea:** free for 1 household; premium ($3–5/mo) for themes, budget add-on, receipt scanning.
+Later: invite partner/family by link with live sync (Supabase), push reminders, receipt scanning, date ideas, multiple shopping lists, App Store wrap.
 
-## Open questions for Luke
-1. Who exactly is the target user — couples only, or families/roommates too?
-2. Must-have for v1: which of the 6 above, and anything missing?
-3. Keep budget tracking at all? (cut, later add-on, or v1)
-4. Look and feel: calm/neutral pastel, bold poster style, or something new?
-5. Name: keep "HomeBoard"?
-6. Free, paid, or freemium?
+## How it ships
+- **Installable web app (PWA)**: one link works on iPhone, Android, iPad and desktop; "Add to Home Screen".
+- **Stack**: React + Vite + TypeScript, plain CSS design system. Data is local-first (`localStorage`) behind a small store so it can move to Supabase (auth, Postgres, realtime, row-level security per household) without touching screens. Host on Netlify or Vercel.
+- **App stores later** via Capacitor once there's traction.
+
+## Pricing (decided: freemium, with a subscription upgrade)
+- **Free forever**: 1 household, up to 2 people, all core modules, 3 themes.
+- **HomeBoard Plus — $3.99/mo or $29.99/yr** (7-day free trial):
+  - unlimited people (families, roommates), all 12 monthly themes
+  - budget module with categories and reports
+  - push reminders, receipt scanning, recurring chores
+  - priority sync across unlimited devices
+- Why subscription over one-time: sync and reminders cost money every month; yearly plan gives a ~37% discount to pull people into annual.
+
+## Open questions
+- Name: keep "HomeBoard"? (check app-store and domain availability before launch)
+- Should kids get a simplified "kid view" in the family plan?
