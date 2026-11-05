@@ -1,7 +1,9 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { viteSingleFile } from "vite-plugin-singlefile";
 
-// https://vite.dev/config/
-export default defineConfig({
-  plugins: [react()],
-})
+// `--mode single` builds one self-contained index.html (JS, CSS and fonts inlined) for quick previews.
+export default defineConfig(({ mode }) => ({
+  plugins: mode === "single" ? [react(), viteSingleFile()] : [react()],
+  build: mode === "single" ? { assetsInlineLimit: 100_000_000, cssCodeSplit: false } : {},
+}));
