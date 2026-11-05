@@ -37,7 +37,7 @@ export default function App() {
   return (
     <>
       <header className="top">
-        <div className="brand"><img src="/icon.svg" alt="" width={30} height={30} /><div><small>homeboard</small><h1>{s.settings.household}</h1></div></div>
+        <div className="brand"><img src={`${import.meta.env.BASE_URL}icon.svg`} alt="" width={30} height={30} /><div><small>homeboard</small><h1>{s.settings.household}</h1></div></div>
         <nav className="tabs" aria-label="Sections">
           {tabs.map((t) => <button key={t.id} type="button" className="tab" aria-current={active === t.id ? "page" : undefined} onClick={() => go(t.id)}>{t.label}</button>)}
         </nav>

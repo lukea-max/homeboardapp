@@ -81,7 +81,7 @@ h2.sec.big { font-size: clamp(28px, 7vw, 44px); }
 .t-date { background-color: var(--letter); color: var(--deep); }
 .t-date .kicker { color: var(--deep); }
 .tile { container-type: inline-size; }
-.t-date .day { font-family: var(--f-hand); font-weight: 700; font-size: clamp(30px, 21cqi, 72px); line-height: .85; }
+.t-date .day { font-family: var(--f-hand); font-weight: 700; font-size: clamp(30px, 24cqi, 72px); line-height: .85; }
 .t-date .lbl { font-size: 28px; }
 .t-meal .mrow { font-family: var(--f-hand); font-size: 21px; display: flex; gap: 8px; align-items: baseline; }
 .t-meal .mday { font-family: var(--f-poster); font-size: 9px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); width: 30px; }

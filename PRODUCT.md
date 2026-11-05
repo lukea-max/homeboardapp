@@ -4,20 +4,14 @@
 Most households run their week across five apps: a shared calendar, a notes app for groceries, a group text for "what's for dinner", a banking app, and memory. HomeBoard puts the everyday stuff on one good-looking board that everyone in the home actually opens.
 
 ## Who it's for (decided)
-One app, three kinds of households. You pick yours at sign-up and the board sets itself up for you; everything can be changed later.
-
-| Household | Board starts with | Language tweaks |
-| --- | --- | --- |
-| **Couple** | Today, week, shared to-dos, dinner plan, groceries, date ideas | "us", partner colors |
-| **Family** | Today, week, to-dos/chores per person, meal plan, groceries | kids as people with their own color |
-| **Student / roommates** | Today, classes & deadlines, to-dos, budget, shared groceries & bills | "classes", "split" |
+Anyone who shares a home or a schedule — couples, families, students, roommates. **The app never asks which group you are.** People downloaded it for their own reason; sign-up only asks for a board name, who's on it, and which sections they want.
 
 Positioning: **"the fridge whiteboard, upgraded."** One shared board, not another productivity tool.
 
 ## Core principles (decided)
-1. **Your board, your way.** Every section is a module you can switch on or off in Settings, and the home board is made of widgets you can drag to reorder or hide.
-2. **Budget is optional.** Off by default for couples and families, on for students. Lives in Settings → Modules.
-3. **Same look as the original board.** Monthly color-block poster themes, frosted acrylic glass cards, dry-erase handwriting for content. Twelve monthly palettes plus "follow the season".
+1. **Your board, your way — set up in Settings.** Every section is a module you can switch on or off, and the board's widgets can be dragged to reorder or hidden. All of this lives in **Settings → Your board**, so the Board tab stays clean: only today's, day-to-day info.
+2. **Budget is optional.** Off by default; one switch in Settings → Sections.
+3. **Same look as the original board, new color every month.** The 12 color-block poster calendars (JAN pink, FEB blue, MAR green, APR teal, MAY orange, JUN yellow, JUL lime, AUG powder blue, SEP purple, OCT amber, NOV deep teal, DEC red) are the palette inspiration. "Seasonal" is the default, so the board changes color every month. Frosted acrylic glass cards, dry-erase handwriting for content.
 4. **Phone first.** Designed at 390px, scales up to iPad and desktop.
 
 ## v1 scope
@@ -37,9 +31,9 @@ Later: invite partner/family by link with live sync (Supabase), push reminders, 
 - **App stores later** via Capacitor once there's traction.
 
 ## Pricing (decided: freemium, with a subscription upgrade)
-- **Free forever**: 1 household, up to 2 people, all core modules, 3 themes.
+- **Free forever**: 1 board, up to 2 people, all core sections, seasonal theme (changes monthly) + 3 fixed themes.
 - **HomeBoard Plus — $3.99/mo or $29.99/yr** (7-day free trial):
-  - unlimited people (families, roommates), all 12 monthly themes
+  - unlimited people, pin any of the 12 monthly themes
   - budget module with categories and reports
   - push reminders, receipt scanning, recurring chores
   - priority sync across unlimited devices

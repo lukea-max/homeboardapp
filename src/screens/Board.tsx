@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { DndContext, KeyboardSensor, PointerSensor, TouchSensor, closestCenter, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, arrayMove, rectSortingStrategy, sortableKeyboardCoordinates, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -28,7 +27,7 @@ function greeting(s: State) {
   if (h) return `${h.emoji} ${h.name.toLowerCase()}!`;
   const hr = new Date().getHours();
   const part = hr < 12 ? "good morning" : hr < 18 ? "good afternoon" : "good evening";
-  return s.settings.type === "couple" ? `${part}, you two` : `${part}!`;
+  return s.settings.people.length === 2 ? `${part}, you two` : s.settings.people.length === 1 ? `${part}, ${s.settings.people[0].name.toLowerCase()}` : `${part}, everyone`;
 }
 
 /* ---------- widgets ---------- */
@@ -177,27 +176,15 @@ export function BoardEditor() {
 
 export function Board(props: Omit<Ctx, "s">) {
   const s = useAppState();
-  const [editing, setEditing] = useState(false);
   const visible = s.settings.widgets.filter((w) => { const m = WIDGET_MODULE[w.id]; return w.on && (!m || s.settings.modules[m]); });
   const ctx = { ...props, s };
   return (
     <section className="view">
       <PosterHead date={new Date()} note={greeting(s)} />
-      <div className="board-bar">
-        <span className="eyebrow">{eventsOn(s, today()).length ? "here's your day" : "a quiet day"}</span>
-        <button type="button" className={"btn" + (editing ? " primary" : "")} onClick={() => setEditing((x) => !x)}>{editing ? "Done" : "Customize board"}</button>
+      <div className="mosaic">
+        {visible.map((w) => <div key={w.id} className={"cell-w size-" + SIZE[w.id]}>{WIDGETS[w.id](ctx)}</div>)}
+        {!visible.length && <Empty>Your board is empty. Add sections in Settings → Your board.</Empty>}
       </div>
-      {editing ? (
-        <div className="editing">
-          <p className="hint">Drag to reorder. Switch off anything you don't need. Turn whole sections on or off in Settings.</p>
-          <BoardEditor />
-        </div>
-      ) : (
-        <div className="mosaic">
-          {visible.map((w) => <div key={w.id} className={"cell-w size-" + SIZE[w.id]}>{WIDGETS[w.id](ctx)}</div>)}
-          {!visible.length && <Empty>Your board is empty. Tap Customize board to add sections.</Empty>}
-        </div>
-      )}
     </section>
   );
 }

@@ -2,7 +2,6 @@ import { useSyncExternalStore } from "react";
 import { addDays, iso, today } from "./date";
 
 /* ---------- types ---------- */
-export type HouseholdType = "couple" | "family" | "student";
 export type ModuleId = "calendar" | "todos" | "meals" | "groceries" | "budget";
 export type WidgetId = "today" | "agenda" | "week" | "todos" | "meals" | "groceries" | "budget";
 export type Repeat = "none" | "weekly" | "monthly" | "yearly";
@@ -17,7 +16,6 @@ export interface Expense { id: string; date: string; label: string; amount: numb
 
 export interface Settings {
   household: string;
-  type: HouseholdType;
   people: Person[];
   modules: Record<ModuleId, boolean>;
   widgets: { id: WidgetId; on: boolean }[];
@@ -51,51 +49,32 @@ export const WIDGET_MODULE: Record<WidgetId, ModuleId | null> = {
 };
 export const BUDGET_CATEGORIES = ["Groceries", "Dining out", "Shopping", "Transport", "Bills", "Fun", "Other"];
 
-/* ---------- presets per household type ---------- */
-export const PRESETS: Record<HouseholdType, { label: string; blurb: string; people: string[]; modules: Record<ModuleId, boolean>; widgets: WidgetId[]; mealSlots: Slot[] }> = {
-  couple: {
-    label: "Couple", blurb: "Plans, dinners and errands for the two of you",
-    people: ["You", "Partner"],
-    modules: { calendar: true, todos: true, meals: true, groceries: true, budget: false },
-    widgets: ["today", "agenda", "week", "todos", "meals", "groceries", "budget"],
-    mealSlots: ["dinner"],
-  },
-  family: {
-    label: "Family", blurb: "Everyone's schedule, chores and the weekly meal plan",
-    people: ["Parent 1", "Parent 2", "Kid"],
-    modules: { calendar: true, todos: true, meals: true, groceries: true, budget: false },
-    widgets: ["today", "agenda", "todos", "week", "meals", "groceries", "budget"],
-    mealSlots: ["breakfast", "lunch", "dinner"],
-  },
-  student: {
-    label: "Student / roommates", blurb: "Classes, deadlines, shared groceries and a budget",
-    people: ["You"],
-    modules: { calendar: true, todos: true, meals: false, groceries: true, budget: true },
-    widgets: ["today", "agenda", "todos", "budget", "week", "groceries", "meals"],
-    mealSlots: ["dinner"],
-  },
-};
+/* ---------- defaults ---------- */
+export const DEFAULT_MODULES: Record<ModuleId, boolean> = { calendar: true, todos: true, meals: true, groceries: true, budget: false };
+export const DEFAULT_WIDGETS: WidgetId[] = ["today", "agenda", "week", "todos", "meals", "groceries", "budget"];
 
 const uid = () => Math.random().toString(36).slice(2, 10);
 const COLORS = ["sky", "pink", "lime", "sun", "lilac", "coral"];
 
-export function makeSettings(type: HouseholdType, names: string[], household: string): Settings {
-  const p = PRESETS[type];
+export function makePerson(name: string, index: number): Person {
+  return { id: uid(), name, color: COLORS[index % COLORS.length] };
+}
+
+export function makeSettings(names: string[], household: string, modules: Record<ModuleId, boolean> = DEFAULT_MODULES): Settings {
   return {
     household,
-    type,
-    people: names.map((name, i) => ({ id: uid(), name, color: COLORS[i % COLORS.length] })),
-    modules: { ...p.modules },
-    widgets: p.widgets.map((id) => ({ id, on: id === "budget" ? p.modules.budget : true })),
+    people: names.map((name, i) => makePerson(name, i)),
+    modules: { ...modules },
+    widgets: DEFAULT_WIDGETS.map((id) => ({ id, on: id === "budget" ? modules.budget : true })),
     theme: "seasonal",
-    mealSlots: [...p.mealSlots],
-    weeklyBudget: type === "student" ? 150 : null,
+    mealSlots: ["dinner"],
+    weeklyBudget: null,
   };
 }
 
 const fresh = (): State => ({
   onboarded: false,
-  settings: makeSettings("couple", PRESETS.couple.people, "Our Home"),
+  settings: makeSettings(["You"], "My Home"),
   events: [], todos: [], meals: [], groceries: [], expenses: [],
 });
 
