@@ -21,7 +21,8 @@ Positioning: **"the fridge whiteboard, upgraded."** One shared board, not anothe
 4. **Meals**: week plan (dinner only, or breakfast/lunch/dinner in Settings).
 5. **Groceries**: one shared list, check off while shopping, clear checked.
 6. **Budget** (optional module): log spending by category, weekly budget bar.
-7. **Settings**: household type, people & colors, modules on/off, board layout, theme.
+7. **Assistant** (its own tab): tell it what's going on in plain words ("dentist Tuesday at 3, tacos tomorrow, add tortillas") and it proposes calendar events, to-dos, meals, grocery items and expenses. Nothing is added until you tap "Add to board". Runs on Claude through Netlify AI Gateway (`netlify/functions/assistant.mts`, rate-limited per visitor).
+8. **Settings** (gear in the header): your board layout, sections on/off, people & colors, theme.
 
 Later: invite partner/family by link with live sync (Supabase), push reminders, receipt scanning, date ideas, multiple shopping lists, App Store wrap.
 
@@ -35,7 +36,7 @@ Later: invite partner/family by link with live sync (Supabase), push reminders, 
 - **HomeBoard Plus — $3.99/mo or $29.99/yr** (7-day free trial):
   - unlimited people, pin any of the 12 monthly themes
   - budget module with categories and reports
-  - push reminders, receipt scanning, recurring chores
+  - unlimited assistant messages (free plan gets a monthly allowance), push reminders, receipt scanning, recurring chores
   - priority sync across unlimited devices
 - Why subscription over one-time: sync and reminders cost money every month; yearly plan gives a ~37% discount to pull people into annual.
 

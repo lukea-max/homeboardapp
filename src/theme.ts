@@ -35,6 +35,13 @@ export function themeKey(setting: string, viewing?: Date): MonthKey {
   return MONTH_KEYS[(viewing || new Date()).getMonth()];
 }
 
+/** Mixes two hex colors in JS so older browsers without color-mix() still get it. */
+function mix(a: string, b: string, t: number) {
+  const n = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+  const [x, y] = [n(a), n(b)];
+  return "#" + x.map((v, i) => Math.round(v * t + y[i] * (1 - t)).toString(16).padStart(2, "0")).join("");
+}
+
 /** Writes the palette as CSS variables on :root. */
 export function applyTheme(key: MonthKey) {
   const P = POSTER[key];
@@ -44,7 +51,7 @@ export function applyTheme(key: MonthKey) {
     "--letter": P.letter,
     "--deep": P.deep,
     "--ink": L ? "#FFFBF4" : P.deep,
-    "--muted": L ? "rgba(255,251,244,.72)" : `color-mix(in srgb, ${P.deep} 72%, ${P.base})`,
+    "--muted": L ? "rgba(255,251,244,.72)" : mix(P.deep, P.base, 0.72),
     "--line": L ? "rgba(255,255,255,.3)" : "rgba(255,255,255,.55)",
     "--edge": L ? "rgba(255,255,255,.26)" : "rgba(255,255,255,.6)",
     "--glass": L ? "rgba(255,255,255,.1)" : "rgba(255,255,255,.26)",

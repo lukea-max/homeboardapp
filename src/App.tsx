@@ -9,11 +9,13 @@ import { Calendar } from "./screens/Calendar";
 import { Budget, Groceries, Meals, Todos } from "./screens/Lists";
 import { Settings } from "./screens/Settings";
 import { Onboarding } from "./screens/Onboarding";
+import { Assistant } from "./screens/Assistant";
 
-export type Tab = "board" | ModuleId | "settings";
-const TABS: { id: Tab; label: string }[] = [
-  { id: "board", label: "Board" }, { id: "calendar", label: "Calendar" }, { id: "todos", label: "To-dos" },
-  { id: "meals", label: "Meals" }, { id: "groceries", label: "Groceries" }, { id: "budget", label: "Budget" }, { id: "settings", label: "Settings" },
+export type Tab = "board" | "assistant" | ModuleId | "settings";
+// Settings lives behind the gear in the header, so the tab row stays short enough for phones.
+const TABS: { id: Exclude<Tab, "settings">; label: string }[] = [
+  { id: "board", label: "Board" }, { id: "calendar", label: "Calendar" }, { id: "assistant", label: "Assistant" }, { id: "todos", label: "To-dos" },
+  { id: "meals", label: "Meals" }, { id: "groceries", label: "Groceries" }, { id: "budget", label: "Budget" },
 ];
 
 // "settings" is spelled "setup" in the URL so it never clashes with host pages that reserve #settings.
@@ -27,8 +29,8 @@ export default function App() {
   const [ev, setEv] = useState<EventDraft | null>(null);
   const [td, setTd] = useState<TodoDraft | null>(null);
 
-  const tabs = TABS.filter((t) => t.id === "board" || t.id === "settings" || s.settings.modules[t.id as ModuleId]);
-  const active = tabs.some((t) => t.id === tab) ? tab : "board";
+  const tabs = TABS.filter((t) => t.id === "board" || t.id === "assistant" || s.settings.modules[t.id as ModuleId]);
+  const active: Tab = tab === "settings" || tabs.some((t) => t.id === tab) ? tab : "board";
   const go = (t: Tab) => { location.hash = toHash(t); setTab(t); window.scrollTo(0, 0); };
 
   useEffect(() => { const f = () => setTab(readHash()); window.addEventListener("hashchange", f); return () => window.removeEventListener("hashchange", f); }, []);
@@ -44,6 +46,7 @@ export default function App() {
         <nav className="tabs" aria-label="Sections">
           {tabs.map((t) => <button key={t.id} type="button" className="tab" aria-current={active === t.id ? "page" : undefined} onClick={() => go(t.id)}>{t.label}</button>)}
         </nav>
+        <button type="button" className={"round gear" + (active === "settings" ? " on" : "")} aria-label="Settings" aria-current={active === "settings" ? "page" : undefined} onClick={() => go("settings")}>{Icon.settings}</button>
       </header>
       <main className="wrap">
         {active === "board" && <Board go={go} newEvent={setEv} newTodo={setTd} />}
@@ -53,6 +56,7 @@ export default function App() {
         {active === "groceries" && <Groceries />}
         {active === "budget" && <Budget />}
         {active === "settings" && <Settings />}
+        {active === "assistant" && <Assistant />}
       </main>
       <nav className="tabbar" aria-label="Sections" style={{ gridTemplateColumns: `repeat(${tabs.length}, minmax(0,1fr))` }}>
         {tabs.map((t) => <button key={t.id} type="button" className="tab" aria-current={active === t.id ? "page" : undefined} onClick={() => go(t.id)}>{Icon[t.id]}<span>{t.label}</span></button>)}
